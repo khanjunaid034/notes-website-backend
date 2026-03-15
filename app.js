@@ -20,7 +20,10 @@ const limiter = rateLimit({
 const app = express();
 
 /* protection packages */
-// app.use(cors());
+if(process.env?.NODE_ENV == 'dev') {
+    app.use(cors());
+}
+
 app.use(helmet());
 
 app.use(limiter);
