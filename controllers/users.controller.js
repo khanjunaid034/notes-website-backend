@@ -100,7 +100,7 @@ const loginUser = async (req, res, next) => {
         isUserExist ? await updateUser() : await createUser();
 
         transporter.sendMail({
-            from: '"Computer Science Teacher" <powermasteraws@gmail.com>',
+            from: '"Computer Science Teacher" <junedaws4@gmail.com>',
             to: data.email,
             subject: "Your login OTP for notes.awsdude.in",
             text: `OTP is ${otp}, valid for 15 minutes.`

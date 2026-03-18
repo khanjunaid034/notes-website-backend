@@ -19,11 +19,11 @@ export const emailNotes = async (id) => {
         FROM purchased_notes pu
         INNER JOIN users u ON pu.user_id = u.id
         INNER JOIN notes n ON n.id = pu.notes_id
-        WHERE pu.id =  $1
+        WHERE pu.id =  $1 AND pu.ispaymentverified = $2
     `;
 
     
-    const result = await pool.query(myQuery, [purchase_id]);
+    const result = await pool.query(myQuery, [purchase_id, true]);
     const { email, url} = result.rows[0];
 
     const { bucket, key } = parseS3Url(url);
@@ -36,12 +36,12 @@ export const emailNotes = async (id) => {
     const signedUrl = await getSignedUrl(s3, command, { expiresIn: 7200 });
 
     transporter.sendMail({
-        from: '"Computer Science Teacher" <powermasteraws@gmail.com>',
+        from: '"Computer Science Teacher" <junedaws4@gmail.com>',
         to: email,
         subject: "Order Arrived - Notes from Computer Science Teacher",
         html: `
             <h3>Please use the below link to download the notes</h3>
-            <p>Please note that the link will expire in 2 hours, so make sure to download and keep a copy with you.</p>
+            <p>Please note that the link will expire in 2 hours, please ensure to download and keep a copy with you.</p>
             <p>Download link: <a href=${signedUrl}>download here</a><p>
             <h3>Computer Science Teacher</h3>
         `
