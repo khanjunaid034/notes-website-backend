@@ -36,7 +36,7 @@ export const emailNotes = async (id) => {
     const signedUrl = await getSignedUrl(s3, command, { expiresIn: 7200 });
 
     transporter.sendMail({
-        from: '"Computer Science Teacher" <junedaws4@gmail.com>',
+        from: '"Computer Science Teacher" <no-reply@notes.awsdude.in>',
         to: email,
         subject: "Order Arrived - Notes from Computer Science Teacher",
         html: `

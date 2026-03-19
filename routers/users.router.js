@@ -1,11 +1,22 @@
 import express from "express";
 import * as usersController from "../controllers/users.controller.js";
+import rateLimit from "express-rate-limit";
 
 const usersRouter = express.Router();
 
+const sendOtpLimit = rateLimit({
+    limit: 3,
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    handler: (req, res) => {
+        res.status(429).json({
+            message: `Limit reached, please try again after 15 minutes.`
+        })
+    }
+});
+
 /* to login and get a jwt */
 usersRouter.route('/login')
-    .post(usersController.loginUser);
+    .post(sendOtpLimit, usersController.loginUser);
 
 /* verify the otp */
 usersRouter.route('/verifyLogin')

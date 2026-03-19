@@ -14,7 +14,10 @@ import hpp from "hpp";
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 60,
-    message: "Too many requests, please try again in 15 minutes."
+    // message: "Too many requests, please try again in 15 minutes."
+    handler: (req, res) => {
+        res.status(429).json({message: `Too many requests, please try again later.`})
+    }
 });
 
 const app = express();
@@ -26,7 +29,7 @@ if(process.env?.NODE_ENV == 'dev') {
 
 app.use(helmet());
 
-app.use(limiter);
+// app.use(limiter);
 app.use(hpp());
 
 

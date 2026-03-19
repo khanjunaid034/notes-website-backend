@@ -23,8 +23,14 @@ export const addNotes = async (req, res, next) => {
 
 export const getNotes = async (req, res) => {
     try {
-        const result = await pool.query(`SELECT * FROM notes`);
-        return res.status(200).json({ status: true, data: result.rows });
+        if (req?.query?.subject) {
+            const result = await pool.query(`SELECT * FROM notes WHERE subject ILIKE $1`, [`%${req.query.subject}%`]);
+            return res.status(200).json({ status: true, data: result.rows });
+        } else {
+            const result = await pool.query(`SELECT * FROM notes`);
+            return res.status(200).json({ status: true, data: result.rows });
+        }
+
     } catch (error) {
         console.error(error);
         return res.status(400).json({ status: false, message: error?.message || 'Something went wrong!' });

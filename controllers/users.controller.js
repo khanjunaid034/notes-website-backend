@@ -10,7 +10,7 @@ const createOtp = () => {
     for (let i = 0; i < 4; i++) {
         otp += Math.floor(Math.random() * 10);
     }
-    if(otp.charAt(0) == '0') {
+    if (otp.charAt(0) == '0') {
         otp = Number(otp) + 1000;
     }
     return otp;
@@ -100,14 +100,14 @@ const loginUser = async (req, res, next) => {
         isUserExist ? await updateUser() : await createUser();
 
         transporter.sendMail({
-            from: '"Computer Science Teacher" <junedaws4@gmail.com>',
+            from: '"Computer Science Teacher" <no-reply@notes.awsdude.in>',
             to: data.email,
             subject: "Your login OTP for notes.awsdude.in",
             text: `OTP is ${otp}, valid for 15 minutes.`
 
         });
 
-        return res.status(200).json({ message: "OTP sent via email" });
+        return res.status(200).json({ message: "OTP sent via email, please check your SPAM folder too." });
     } catch (error) {
         // console.error(error);
         return res.status(400).json(error);
@@ -132,7 +132,7 @@ const verifyJwt = async (req, res, next) => {
         }
 
         const result = await pool.query(`SELECT * from users WHERE id = $1`, [decoded.id]);
-        if (result.rows.length === 0)   return res.status(404).json({ status: false, message: "User not found" });
+        if (result.rows.length === 0) return res.status(404).json({ status: false, message: "User not found" });
 
         req.user = result.rows[0];
         next();
@@ -146,8 +146,8 @@ const verifyJwt = async (req, res, next) => {
 
 
 const checkAdmin = (req, res, next) => {
-    if(req.user.role != 'admin') {
-        return res.status(403).json({ status: false, message: 'Only admins can perform this operation!'});
+    if (req.user.role != 'admin') {
+        return res.status(403).json({ status: false, message: 'Only admins can perform this operation!' });
     }
     next();
 }
