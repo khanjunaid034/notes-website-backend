@@ -1,7 +1,8 @@
 import timestamp from "unix-timestamp";
 import { pool } from "../db.js";
 import jwt from "jsonwebtoken";
-import { transporter } from "../sendEmail.js";
+// import { transporter } from "../sendEmail.js";
+import sendEmail from "../utils/sendEmailSES.js";
 
 
 
@@ -99,11 +100,11 @@ const loginUser = async (req, res, next) => {
 
         isUserExist ? await updateUser() : await createUser();
 
-        transporter.sendMail({
+        sendEmail({
             from: '"Computer Science Teacher" <no-reply@notes.awsdude.in>',
-            to: data.email,
+            email: data.email,
             subject: "Your login OTP for notes.awsdude.in",
-            text: `OTP is ${otp}, valid for 15 minutes.`
+            body: `OTP is ${otp}, valid for 15 minutes.`
 
         });
 

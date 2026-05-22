@@ -9,6 +9,9 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import hpp from "hpp";
 
+const app = express();
+
+app.set('trust proxy', true);
 
 /* rate limiter config */
 const limiter = rateLimit({
@@ -16,14 +19,14 @@ const limiter = rateLimit({
     max: 60,
     // message: "Too many requests, please try again in 15 minutes."
     handler: (req, res) => {
-        res.status(429).json({message: `Too many requests, please try again later.`})
+        res.status(429).json({ message: `Too many requests, please try again later.` })
     }
 });
 
-const app = express();
+
 
 /* protection packages */
-if(process.env?.NODE_ENV == 'dev') {
+if (process.env?.NODE_ENV == 'dev') {
     app.use(cors());
 }
 

@@ -2,7 +2,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3 } from "../utils/s3client.js";
 import { GetObject$, GetObjectCommand } from "@aws-sdk/client-s3";
 import { pool } from "../db.js";
-import { transporter } from "../sendEmail.js";
+import sendEmail from "../utils/sendEmailSES.js";
 
 function parseS3Url(url) {
     const u = new URL(url);
@@ -35,7 +35,7 @@ export const emailNotes = async (id) => {
 
     const signedUrl = await getSignedUrl(s3, command, { expiresIn: 7200 });
 
-    transporter.sendMail({
+    sendMail({
         from: '"Computer Science Teacher" <no-reply@notes.awsdude.in>',
         to: email,
         subject: "Order Arrived - Notes from Computer Science Teacher",
@@ -47,4 +47,3 @@ export const emailNotes = async (id) => {
         `
     });
 }
-
