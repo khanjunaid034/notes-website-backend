@@ -11,7 +11,7 @@ import hpp from "hpp";
 
 const app = express();
 
-app.set('trust proxy', true);
+app.set('trust proxy', 1);
 
 /* rate limiter config */
 const limiter = rateLimit({

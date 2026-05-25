@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import sendEmail from "../utils/sendEmailSES.js";
 
 
-
 const createOtp = () => {
     let otp = "";
     for (let i = 0; i < 4; i++) {
@@ -18,11 +17,9 @@ const createOtp = () => {
 }
 
 
-
 const signJwtToken = (user) => {
     return jwt.sign(user, process.env.JWT_KEY, { expiresIn: process.env.JWT_EXPIRES });
 }
-
 
 
 const verifyLogin = async (req, res, next) => {
@@ -66,8 +63,6 @@ const verifyLogin = async (req, res, next) => {
 }
 
 
-
-
 const loginUser = async (req, res, next) => {
     const data = req.body;
     if (!data?.email) {
@@ -102,7 +97,7 @@ const loginUser = async (req, res, next) => {
 
         sendEmail({
             from: '"Computer Science Teacher" <no-reply@notes.awsdude.in>',
-            email: data.email,
+            to: data.email,
             subject: "Your login OTP for notes.awsdude.in",
             body: `OTP is ${otp}, valid for 15 minutes.`
 
@@ -114,7 +109,6 @@ const loginUser = async (req, res, next) => {
         return res.status(400).json(error);
     }
 }
-
 
 
 const verifyJwt = async (req, res, next) => {
@@ -145,14 +139,12 @@ const verifyJwt = async (req, res, next) => {
 }
 
 
-
 const checkAdmin = (req, res, next) => {
     if (req.user.role != 'admin') {
         return res.status(403).json({ status: false, message: 'Only admins can perform this operation!' });
     }
     next();
 }
-
 
 
 const getUsers = async (req, res, next) => {

@@ -2,6 +2,7 @@ import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
 const client = new SESClient({
   region: "ap-south-1",
+  useDualstackEndpoint: true,
   credentials: {
     accessKeyId: process.env.SMTP_USER,
     secretAccessKey: process.env.SMTP_PASSWORD,
